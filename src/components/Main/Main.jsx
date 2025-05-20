@@ -1,21 +1,27 @@
 import { useState } from "react";
 import "./Main.css";
+import ClaudeRecipe from "../ClaudeRecipe/ClaudeRecipe";
+import IngredientsList from "../IngredientsList/IngredientsList";
 
 const Main = () => {
   const [ingredients, setIngredient] = useState([]);
 
-  const ingredientsListItems = ingredients.map((ingredient) => (
-    <li key={ingredient}>{ingredient}</li>
-  ));
+  const [recipieShown, setRecipieShown] = useState(false);
 
   function addIngredient(formData) {
     const newIngredient = formData.get("ingredient");
     setIngredient((prevIngredient) => [...prevIngredient, newIngredient]);
   }
+
+  function toggleRecipieShown() {
+    setRecipieShown((prevShown) => !prevShown);
+  }
+
   return (
     <main>
       <form action={addIngredient} className="add-ingredient-form">
         <input
+          onChange
           aria-label="Add ingredient"
           placeholder="e.g oregano"
           name="ingredient"
@@ -23,7 +29,13 @@ const Main = () => {
         <button>Add ingredient</button>
       </form>
 
-      <ul>{ingredientsListItems}</ul>
+      {ingredients.length > 0 && (
+        <IngredientsList
+          ingredients={ingredients}
+          toggleRecipieShown={toggleRecipieShown}
+        ></IngredientsList>
+      )}
+      {recipieShown && <ClaudeRecipe></ClaudeRecipe>}
     </main>
   );
 };
